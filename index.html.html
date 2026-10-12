@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Target MSS Saya – Provision Bekasi</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#f2f5fb;--card:#fff;--tx:#17233a;--mu:#68758c;--bd:#e3e9f3;--ac:#2563eb;--ac2:#7c3aed;--ok:#16a34a;--okb:#e8f8ee;--no:#dc2626;--nob:#fdecec;--wa:#f59e0b;--wab:#fff6e0;--sh:0 4px 14px rgba(30,50,90,.08)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1420;--card:#172033;--tx:#e9eefa;--mu:#93a1bb;--bd:#27334a;--ac:#6ea0ff;--ac2:#a78bfa;--ok:#4ade80;--okb:#12301f;--no:#ff7a70;--nob:#37191a;--wa:#fbbf24;--wab:#332a10;--sh:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:40px}
+.hero{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:18px 16px 56px;position:relative}
+.hero h1{margin:0;font-size:22px}.hero p{margin:2px 0 0;opacity:.9;font-size:14px}
+.gear{position:absolute;right:12px;top:12px;background:rgba(255,255,255,.2);border:0;color:#fff;border-radius:12px;padding:8px 12px;font-size:14px;cursor:pointer}
+.wrap{max-width:900px;margin:-40px auto 0;padding:0 12px}
+.tabs{display:flex;background:var(--card);border-radius:16px;padding:4px;box-shadow:var(--sh);margin-bottom:12px}
+.tabs button{flex:1;border:0;background:none;color:var(--mu);font:inherit;font-weight:600;padding:12px;border-radius:12px;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#fff}
+.card{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--sh);margin-bottom:12px;border:1px solid var(--bd)}
+h2{font-size:18px;margin:4px 0 10px}.mu{color:var(--mu)}small{color:var(--mu)}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.who{border:2px solid var(--bd);background:var(--card);color:var(--tx);border-radius:18px;padding:14px 10px;text-align:center;cursor:pointer;font:inherit;box-shadow:var(--sh)}
+.who:active{transform:scale(.97)}.who b{display:block;margin-top:6px}
+.av{width:52px;height:52px;border-radius:50%;margin:0 auto;display:grid;place-items:center;color:#fff;font-weight:700;font-size:20px;background:linear-gradient(135deg,var(--ac),var(--ac2))}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--ok);border-radius:6px}
+.me{display:flex;gap:14px;align-items:center}
+.ring{--p:0;width:84px;height:84px;border-radius:50%;background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--bd) 0);display:grid;place-items:center;flex:none;position:relative}
+.ring:before{content:"";position:absolute;inset:9px;background:var(--card);border-radius:50%}.ring b{position:relative;font-size:18px}
+.sk4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.sk4>div{background:var(--bg);border-radius:12px;padding:8px 4px;text-align:center;font-size:12px}.sk4 b{display:block;font-size:16px}
+.days{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px}
+.chip{flex:none;border:2px solid var(--bd);background:var(--card);color:var(--tx);border-radius:14px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer;text-align:center;line-height:1.2}
+.chip small{display:block;font-weight:400}.chip.on{background:var(--ac);border-color:var(--ac);color:#fff}.chip.on small{color:#fff}
+.chip.today:not(.on){border-color:var(--wa)}
+.tool{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+input[type=search],select{flex:1;min-width:160px;font:inherit;padding:12px;border-radius:12px;border:2px solid var(--bd);background:var(--card);color:var(--tx)}
+.tg{display:flex;align-items:center;gap:8px;font-weight:600;padding:8px 4px}.tg input{width:22px;height:22px}
+.toko{border-radius:18px;padding:14px;margin-bottom:10px;border:2px solid var(--bd);background:var(--card);box-shadow:var(--sh)}
+.toko.full{border-color:var(--ok);background:var(--okb)}.toko.zero{border-color:var(--no)}.toko.part{border-color:var(--wa)}
+.th{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.th b{font-size:17px}
+.score{font-weight:700;border-radius:20px;padding:4px 12px;background:var(--bg);white-space:nowrap}
+.sku{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+@media(min-width:560px){.sku{grid-template-columns:repeat(4,1fr)}}
+.pl{display:flex;align-items:center;gap:6px;border-radius:12px;padding:9px 10px;font-weight:600;font-size:14px}
+.pl i{font-style:normal;font-size:20px}.pl b{margin-left:auto;font-size:18px}
+.pl.ok{background:var(--okb);color:var(--ok)}.pl.no{background:var(--nob);color:var(--no)}
+.need{font-size:14px;font-weight:600}.need.o{color:var(--ok)}
+.sc{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;padding:2px 10px;border-radius:10px;background:var(--bg);color:var(--mu)}.sc.bg{background:#efe7ff;color:#6d28d9}.sc.sm{background:#e3f0ff;color:#1d4ed8}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .sc.bg{background:#2e2150;color:#c4b5fd}:root:not([data-theme=light]) .sc.sm{background:#16294a;color:#93c5fd}}
+.pl.no{cursor:pointer}.tip{background:var(--wab);border:2px solid var(--wa);border-radius:12px;padding:10px 12px;margin:0 0 8px;font-size:14px}.tip b{font-size:17px}
+.dh{font-weight:700;margin:14px 2px 8px;font-size:15px;color:var(--mu)}
+.back{background:none;border:0;color:var(--ac);font:inherit;font-weight:600;padding:6px 0;cursor:pointer}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.k{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;box-shadow:var(--sh)}.k .big{font-size:28px;font-weight:800}
+.w{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:520px}
+th,td{padding:10px 8px;border-bottom:1px solid var(--bd);text-align:center;white-space:nowrap}th{font-size:12px;color:var(--mu)}td:first-child,th:first-child{text-align:left}
+tr.cl{cursor:pointer}tr.cl:hover{background:var(--bg)}
+.hm{border-radius:8px;padding:4px 8px;font-weight:600;font-size:13px;display:inline-block;min-width:38px}
+.g1{background:var(--okb);color:var(--ok)}.g2{background:var(--wab);color:var(--wa)}.g3{background:var(--nob);color:var(--no)}
+#adm{display:none;border:2px dashed var(--ac)}#adm.show{display:block}
+.btn{border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:600;cursor:pointer;background:var(--bg);color:var(--tx);margin:4px 4px 4px 0}.btn.p{background:var(--ac);color:#fff}
+#msg{margin:8px 0;font-weight:600;color:var(--wa)}.empty{text-align:center;padding:30px 10px;color:var(--mu)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <button class="gear" onclick="adm.classList.toggle('show')">⚙ Admin</button>
+  <h1>🎯 Target MSS Saya</h1>
+  <p id="sub">Toko Provision • Bekasi</p>
+</div>
+<div class="wrap">
+  <div class="card" id="adm">
+    <h2>⚙ Menu Admin / Supervisor</h2>
+    <p class="mu" style="margin-top:0">Untuk update data: refresh Excel seperti biasa, lalu upload file Excel yang sama.</p>
+    <button class="btn p" onclick="fu.click()">⬆ Upload File Excel</button>
+    <input id="fu" type="file" accept=".xlsx,.xls,.csv,.tsv,.json" hidden>
+    <button class="btn" onclick="gh()">☁ Simpan untuk Semua Orang (GitHub)</button>
+    <button class="btn" onclick="dl()">⬇ Download data.json</button>
+    <a href="Template_Upload_MSS.xlsx" download><button class="btn">📄 File Excel Template</button></a>
+    <div id="msg"></div>
+  </div>
+  <div class="tabs"><button id="t1" onclick="tab('s')">👤 Salesman</button><button id="t2" onclick="tab('v')">📊 Supervisor</button></div>
+  <div id="main"></div>
+</div>
+<script>
+const SK=["BB","Dancow","Milo Tonic","Milo UHT"],EM=["🐻","🥛","🍫","🧃"],DN=["Belum JP","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"],DS=["JP?","Sen","Sel","Rab","Kam","Jum","Sab","Min"];
+const $=id=>document.getElementById(id),fm=n=>n.toLocaleString("id-ID"),pc=(a,b)=>b?Math.round(a/b*100):0;
+const num=v=>{v=parseFloat(String(v??"").replace(/[^\d.\-]/g,""));return isNaN(v)?0:v};
+const msg=t=>$("msg").textContent=t||"";
+let D=null,S={t:"s",sm:null,day:"all",inc:false,z:false,q:"",o:{}};
+const tdy=(d=>d?d:7)(new Date().getDay()),esc=s=>String(s).replace(/'/g,"\\'");
+function calc(){D.O=D.rows.map(r=>{const m=[0,1,2,3].map(i=>num(r[4+i])*D.vat>D.thr[i]?1:0);return{c:r[0],n:r[1],s:r[2]||"Belum Masuk JP",d:+r[3]||0,m,t:m[0]+m[1]+m[2]+m[3],x:[4,5,6,7].some(i=>num(r[i])>0),sc:r[8]||""}})}
+let A0=0;function auto(){if(A0)return;A0=1;let q=new URLSearchParams(location.search).get("s");try{q=q||localStorage.mssSm}catch(e){}if(!q)return;const k=Object.keys(grp()).find(x=>x.toLowerCase()==q.toLowerCase());if(k)pick(k)}
+function init(d){D=d;calc();$("sub").textContent="Toko Provision • Bekasi • Data: "+(D.updated||"-")+" • "+fm(D.O.length)+" toko";R();if(D.O.length)auto()}
+function tab(t){S.t=t;R()}
+function grp(){const g={};D.O.forEach(o=>(g[o.s]=g[o.s]||[]).push(o));return g}
+const avg=a=>pc(a.reduce((z,o)=>z+o.t,0),a.length*4);
+function pick(s){try{localStorage.mssSm=s}catch(e){}S.sm=s;S.q="";S.inc=false;S.z=false;S.o={};const dd=[...new Set(grp()[s].map(o=>o.d))];S.day=dd.includes(tdy)?tdy:"all";S.t="s";R();scrollTo(0,0)}
+function R(){
+  $("t1").className=S.t=="s"?"on":"";$("t2").className=S.t=="v"?"on":"";
+  $("main").innerHTML=!D||!D.O.length?'<div class="card empty">Belum ada data. Buka menu ⚙ Admin lalu upload file Excel.</div>':(S.t=="v"?sup():(S.sm?me():list()));
+}
+function list(){const g=grp();
+  return'<div class="card"><h2>Halo! 👋 Siapa nama Anda?</h2><p class="mu" style="margin-top:0">Ketuk nama Anda untuk melihat toko yang harus dikunjungi.</p><div class="pick">'+
+  Object.keys(g).sort().map(s=>{const a=g[s],p=avg(a);return`<button class="who" onclick="pick('${esc(s)}')"><div class="av">${s[0].toUpperCase()}</div><b>${s}</b><small>${a.length} toko • ${p}%</small><div class="bar"><i style="width:${p}%"></i></div></button>`}).join("")+'</div></div>'}
+function me(){
+  const A=grp()[S.sm]||[],p=avg(A),dc={};A.forEach(o=>dc[o.d]=(dc[o.d]||0)+1);
+  let h=`<button class="back" onclick="S.sm=null;try{localStorage.removeItem('mssSm')}catch(e){}R()">← Ganti nama</button><div class="card"><div class="me"><div class="ring" style="--p:${p}"><b>${p}%</b></div><div><h2 style="margin:0">Halo, ${S.sm}! 👋</h2><div class="mu">Hari ini ${DN[tdy]} • ${A.length} toko</div><div class="mu">Skor MSS: makin tinggi makin baik</div></div></div><div class="sk4">`+
+   SK.map((k,i)=>{const x=A.reduce((z,o)=>z+o.m[i],0);return`<div>${EM[i]}<b>${pc(x,A.length)}%</b>${k}<br><small>${x}/${A.length} toko</small></div>`}).join("")+`</div></div>`;
+  h+='<div class="days">'+`<button class="chip ${S.day=="all"?"on":""}" onclick="S.day='all';R()">Semua<small>${A.length} toko</small></button>`+
+   [1,2,3,4,5,6,7,0].filter(d=>dc[d]).map(d=>`<button class="chip ${S.day==d?"on":""} ${d==tdy?"today":""}" onclick="S.day=${d};R()">${DS[d]}${d==tdy?" ⭐":""}<small>${dc[d]} toko</small></button>`).join("")+"</div>";
+  h+=`<div class="tool"><input type="search" placeholder="🔍 Cari nama toko…" value="${S.q}" oninput="S.q=this.value;L()"></div><label class="tg"><input type="checkbox" ${S.inc?"checked":""} onchange="S.inc=this.checked;R()"> Tampilkan toko yang belum lengkap saja</label><label class="tg"><input type="checkbox" ${S.z?"checked":""} onchange="S.z=this.checked;R()"> Tampilkan toko yang belum transaksi sama sekali (${A.filter(o=>!o.x).length})</label><div class="mu" style="margin:6px 2px">💡 Ketuk kotak SKU merah (✗) untuk melihat minimal transaksi.</div><div id="lst"></div>`;
+  setTimeout(L,0);return h}
+function tp(c,i){const k=c+"|"+i;S.o[k]=!S.o[k];L()}
+function L(){
+  let A=(grp()[S.sm]||[]).filter(o=>(S.day=="all"||o.d==S.day)&&(!S.q||(o.n+o.c).toLowerCase().includes(S.q.toLowerCase()))&&(!S.inc||o.t<4)&&(!S.z||!o.x));
+  A.sort((a,b)=>(a.d||9)-(b.d||9)||a.t-b.t||a.n.localeCompare(b.n));
+  let h="",last=-1;if(!A.length)h='<div class="empty">Tidak ada toko. 🎉</div>';
+  A.forEach(o=>{if(S.day=="all"&&o.d!=last){last=o.d;h+=`<div class="dh">📅 ${DN[o.d]}</div>`}
+    const miss=SK.filter((k,i)=>!o.m[i]).join(", ");
+    h+=`<div class="toko ${o.t==4?"full":!o.x?"zero":"part"}"><div class="th"><div><b>${o.n}</b><br><small>${o.c}</small>${o.sc?`<br><span class="sc ${/big/i.test(o.sc)?"bg":/small/i.test(o.sc)?"sm":""}">🏪 ${o.sc}</span>`:""}</div><span class="score">${o.t}/4</span></div><div class="sku">`+
+     o.m.map((v,i)=>`<div class="pl ${v?"ok":"no"}" ${v?"":`onclick="tp('${o.c}',${i})"`}><i>${EM[i]}</i>${SK[i]}<b>${v?"✓":"✗"}</b></div>`).join("")+
+     `</div>`+o.m.map((v,i)=>!v&&S.o[o.c+"|"+i]?`<div class="tip">💡 <b>${SK[i]}</b>: minimal transaksi <b>Rp ${fm(Math.ceil(D.thr[i]*(D.ppn||1.11)))}</b>${D.qty?" (±"+D.qty[i]+" pcs)":""}<br><small>Sudah termasuk PPN 11%, jadi transaksikan di harga nett.</small></div>`:"").join("")+`<div class="need ${o.t==4?"o":""}">${o.t==4?"🎉 Lengkap! Pertahankan ya.":(!o.x?"🚨 Belum ada transaksi sama sekali. Tawarkan semua SKU":o.t==0?"⚠ Sudah ada transaksi, tapi belum memenuhi MSS. Tawarkan: "+miss:"👉 Tawarkan: "+miss)}</div></div>`});
+  $("lst").innerHTML=h}
+function sup(){
+  const O=D.O,g=grp(),tg=D.target,full=O.filter(o=>o.t==4).length;
+  let h='<div class="kpi">'+SK.map((k,i)=>{const a=O.reduce((x,o)=>x+o.m[i],0);return`<div class="k"><small>${EM[i]} ${k}</small><div class="big">${pc(a,tg)}%</div><small>${fm(a)} / target ${fm(tg)}</small><div class="bar"><i style="width:${Math.min(100,pc(a,tg))}%"></i></div></div>`}).join("")+
+   `<div class="k"><small>✅ Toko lengkap 4/4</small><div class="big">${full}</div><small>dari ${fm(O.length)} toko (${pc(full,O.length)}%)</small></div></div>`;
+  h+='<div class="card" style="margin-top:12px"><h2>Ringkasan per Salesman</h2><small>Ketuk nama untuk melihat toko-tokonya</small><div class="w"><table><tr><th>Salesman</th><th>Toko</th>'+SK.map((k,i)=>`<th>${EM[i]} ${k}</th>`).join("")+"<th>4/4</th><th>Skor</th></tr>"+
+   Object.keys(g).sort().map(s=>{const a=g[s],p=avg(a);return`<tr class="cl" onclick="pick('${esc(s)}')"><td><b>${s}</b></td><td>${a.length}</td>`+[0,1,2,3].map(i=>{const x=a.reduce((z,o)=>z+o.m[i],0);return`<td>${x} <small>(${pc(x,a.length)}%)</small></td>`}).join("")+`<td>${a.filter(o=>o.t==4).length}</td><td><span class="hm ${p>=60?"g1":p>=40?"g2":"g3"}">${p}%</span></td></tr>`}).join("")+"</table></div></div>";
+  h+='<div class="card"><h2>Skor MSS per Hari Kunjungan</h2><small>Angka = skor rata-rata toko pada hari itu (jumlah toko di bawahnya)</small><div class="w"><table><tr><th>Salesman</th>'+[1,2,3,4,5,6,7].map(d=>`<th>${DS[d]}</th>`).join("")+"</tr>"+
+   Object.keys(g).sort().map(s=>`<tr><td>${s}</td>`+[1,2,3,4,5,6,7].map(d=>{const a=g[s].filter(o=>o.d==d);if(!a.length)return"<td>-</td>";const p=avg(a);return`<td><span class="hm ${p>=60?"g1":p>=40?"g2":"g3"}">${p}%</span><br><small>${a.length} toko</small></td>`}).join("")+"</tr>").join("")+"</table></div></div>";
+  return h}
+// Upload: file Excel ASLI (sheet RAW SO + jp + Treshold), tanpa perubahan format
+fu.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{
+  if(/\.json$/i.test(f.name)){init(JSON.parse(await f.text()));msg("Data JSON dimuat.");return}
+  const wb=XLSX.read(await f.arrayBuffer(),{type:"array"}),sh=n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:""});
+  let rows,extra={};
+  if(wb.SheetNames.includes("RAW SO")){
+    const raw=sh("RAW SO"),a=raw.slice(5).filter(r=>r[0]);
+    let jm={};if(wb.SheetNames.includes("jp"))sh("jp").slice(1).forEach(r=>{if(r[38]!==""&&r[38]!=="Customer Code"&&r[40]!==""){const k="0001887881_"+r[38];if(!jm[k])jm[k]=[r[40],r[41],r[39]]}});
+    let sb={};sh("jp").slice(1).forEach(r=>{if(r[23]!==""&&r[23]!=="Customer Code"){const k="0001887881_"+r[23];if(!sb[k])sb[k]=r[29]}});
+    rows=a.map(r=>{const j=jm[r[0]];return[r[0],r[1],j?j[0]:(r[21]||"Belum Masuk JP"),j?j[1]:(+r[22]||0),r[2],r[3],r[4],r[5],sb[r[0]]||""]});
+    const hv=new Set(rows.map(r=>r[0]));Object.keys(jm).forEach(k=>{if(!hv.has(k))rows.push([k,jm[k][2],jm[k][0]||"Belum Masuk JP",jm[k][1],0,0,0,0,sb[k]||""])});
+    if(wb.SheetNames.includes("Treshold")){const t=sh("Treshold").slice(3,7).map(r=>num(r[0])*num(r[2]));if(t.every(x=>x>0)){extra.thr=t;extra.qty=sh("Treshold").slice(3,7).map(r=>num(r[2]))}}
+    if(num(raw[2]&&raw[2][17])>0)extra.target=num(raw[2][17]);
+  }else{const a=sh(wb.SheetNames[0]).slice(1).filter(r=>r[0]);rows=a.map(r=>r.slice(0,9))}
+  if(!rows.length)throw Error("Tidak ada baris data");
+  init({...D,...extra,updated:new Date().toISOString().slice(0,10),rows});msg("✔ "+rows.length+" toko dimuat. Klik 'Simpan untuk Semua Orang' agar tampil di semua HP.")
+ }catch(x){msg("Gagal membaca file: "+x.message)}e.target.value=""};
+const J=()=>JSON.stringify({updated:D.updated,vat:D.vat,target:D.target,thr:D.thr,cols:D.cols,rows:D.rows});
+function dl(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([J()],{type:"application/json"}));a.download="data.json";a.click()}
+async function gh(){const repo=prompt("Repo GitHub (owner/nama-repo):",localStorage.mssRepo||"");if(!repo)return;localStorage.mssRepo=repo;
+  const tk=prompt("GitHub token (izin Contents: Read & write). Tidak disimpan:");if(!tk)return;
+  const u=`https://api.github.com/repos/${repo}/contents/data.json`,H={Authorization:"Bearer "+tk,Accept:"application/vnd.github+json"};
+  try{const g=await fetch(u,{headers:H});const sha=g.ok?(await g.json()).sha:undefined;
+   const r=await fetch(u,{method:"PUT",headers:H,body:JSON.stringify({message:"Update data MSS "+D.updated,content:btoa(unescape(encodeURIComponent(J()))),sha})});
+   msg(r.ok?"✔ Tersimpan! Netlify akan memperbarui tampilan otomatis.":"Gagal simpan ("+r.status+"). Cek nama repo & izin token.")}catch(x){msg("Gagal: "+x.message)}}
+fetch("data.json?"+Date.now()).then(r=>r.json()).then(init).catch(()=>{D={vat:1.056,target:1352,thr:[26490.99,16779.4,16779.4,13255.92],rows:[]};init(D)});
+</script>
+</body>
+</html>
